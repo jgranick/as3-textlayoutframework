@@ -1,0 +1,657 @@
+<?xml version="1.0" encoding="UTF-8"?><apiPackage id="flashx.textLayout.conversion"><apiName>flashx.textLayout.conversion</apiName><apiDetail/><apiClassifier id="flashx.textLayout.conversion:IPlainTextExporter"><apiName>IPlainTextExporter</apiName><shortdesc> This interface should be implemented by converters that export plain text.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10.0"/><apiPlatform description="" name="AIR" version="2.0"/></apiVersion></asMetadata></prolog><apiClassifierDetail><apiClassifierDef><apiInterface/><apiAccess value="public"/><apiStatic/><apiBaseInterface>flashx.textLayout.conversion:ITextExporter</apiBaseInterface><apiBaseClassifier/></apiClassifierDef><apiDesc> This interface should be implemented by converters that export plain text. Clients that have explicitly
+	 created an exporter using TextConverter.getExporter may control the export process by calling into these methods on the 
+	 exporter.
+	 
+	 </apiDesc></apiClassifierDetail><apiValue id="flashx.textLayout.conversion:IPlainTextExporter:flashx.textLayout.conversion:IPlainTextExporter:paragraphSeparator:get"><apiName>paragraphSeparator</apiName><shortdesc> Specifies the character sequence used (in a text flow's plain-text equivalent) to separate paragraphs.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiValueDetail><apiValueDef><apiProperty/><apiAccess value="public"/><apiDynamic/><apiValueAccess value="readwrite"/><apiType value="String"/></apiValueDef><apiDesc> Specifies the character sequence used (in a text flow's plain-text equivalent) to separate paragraphs.
+		 The paragraph separator is not added after the last paragraph. 
+		 
+		 <p>This property applies to the <codeph>PLAIN_TEXT_FORMAT</codeph> exporter.</p>
+		 
+		 <p>The default value is "\n".</p> 
+		 </apiDesc></apiValueDetail></apiValue><apiValue id="flashx.textLayout.conversion:IPlainTextExporter:flashx.textLayout.conversion:IPlainTextExporter:stripDiscretionaryHyphens:get"><apiName>stripDiscretionaryHyphens</apiName><shortdesc> This property indicates whether discretionary hyphens in the text should be stripped during the export process.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiValueDetail><apiValueDef><apiProperty/><apiAccess value="public"/><apiDynamic/><apiValueAccess value="readwrite"/><apiType value="Boolean"/></apiValueDef><apiDesc> This property indicates whether discretionary hyphens in the text should be stripped during the export process.
+		 Discretionary hyphens, also known as "soft hyphens", indicate where to break a word in case the word must be
+		 split between two lines. The Unicode character for discretionary hyphens is <codeph>\u00AD</codeph>.
+		 <p>If this property is set to <codeph>true</codeph>, discretionary hyphens that are in the original text will not be in the exported text, 
+		 even if they are part of the original text. If <codeph>false</codeph>, discretionary hyphens will be in the exported text.</p>
+		 
+		 </apiDesc></apiValueDetail></apiValue></apiClassifier><apiClassifier id="flashx.textLayout.conversion:TextConverter"><apiName>TextConverter</apiName><shortdesc> 
+	 This is the gateway class for handling import and export.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiClassifierDetail><apiClassifierDef><apiAccess value="public"/><apiStatic/><apiBaseClassifier>Object</apiBaseClassifier></apiClassifierDef><apiDesc> 
+	 This is the gateway class for handling import and export. It serves as a unified access point to the 
+	 conversion functionality in the Text Layout Framework. It contains a registry for predefined as well
+	 as user defined input and/or output converters, plus a set of conversion methods.
+	 <p>
+	 The format of the converted data is not predefined; user written converters are free to accept and return
+	 any format of their choice. Common formats are strings, XML, and ByteArray instances. Converter authors 
+	 should document which formats are supported.
+	 </p>
+	 </apiDesc><example conref="examples\TextConverter_example.as"/></apiClassifierDetail><apiOperation id="flashx.textLayout.conversion:TextConverter:addFormatAt"><apiName>addFormatAt</apiName><shortdesc>
+		 Register a new format for import/export, at the specified location.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiOperationDetail><apiOperationDef><apiAccess value="public"/><apiStatic/><apiReturn><apiType value="void"/></apiReturn><apiParam><apiItemName>index</apiItemName><apiType value="int"/><apiDesc>   The import converter class to register or null
+		 </apiDesc></apiParam><apiParam><apiItemName>format</apiItemName><apiType value="String"/><apiDesc>   The export converter class to register or null
+		 </apiDesc></apiParam><apiParam><apiItemName>importerClass</apiItemName><apiType value="Class"/><apiDesc>        The format string tagging the converter classes
+		 </apiDesc></apiParam><apiParam><apiItemName>exporterClass</apiItemName><apiType value="Class"/><apiData>null</apiData><apiDesc>The string used as the clipboard format when converting to/from the clipboard. Make this null if the format doesn't support clipboard access.
+		 </apiDesc></apiParam><apiParam><apiItemName>clipboardFormat</apiItemName><apiType value="String"/><apiData>null</apiData></apiParam></apiOperationDef><apiDesc>
+		 Register a new format for import/export, at the specified location.
+		 Location can be significant for clients that have multiple 
+		 choices for which format to use, such as when importing from the external clipboard. 
+		 Lower numbers indicate higher priority; these converters will be tried first.
+		 The new format may support importing and/or exporting.
+		 If the format has already been added, then it will be present in multiple locations. The 
+		 first one found will be used.
+		 
+		 </apiDesc></apiOperationDetail></apiOperation><apiOperation id="flashx.textLayout.conversion:TextConverter:addFormat"><apiName>addFormat</apiName><shortdesc>
+		 Register a new format for import/export.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiOperationDetail><apiOperationDef><apiAccess value="public"/><apiStatic/><apiReturn><apiType value="void"/></apiReturn><apiParam><apiItemName>format</apiItemName><apiType value="String"/><apiDesc>   The import converter class to register or null
+		 </apiDesc></apiParam><apiParam><apiItemName>importerClass</apiItemName><apiType value="Class"/><apiDesc>   The export converter class to register or null
+		 </apiDesc></apiParam><apiParam><apiItemName>exporterClass</apiItemName><apiType value="Class"/><apiDesc>        The format string tagging the converter classes. Formats can be any name, but must be unique. 
+		 </apiDesc></apiParam><apiParam><apiItemName>clipboardFormat</apiItemName><apiType value="String"/><apiDesc>The string used as the clipboard format when converting to/from the clipboard. Make this null if the format doesn't support clipboard access.
+		 </apiDesc></apiParam></apiOperationDef><apiDesc>
+		 Register a new format for import/export. The new format will be added at the end,
+		 as the lowest priority. Location can be significant for clients that have multiple 
+		 choices for which format to use, such as when importing from the external clipboard. 
+		 The new format may support importing and/or exporting.
+		 If the format has already been added, then it will be present in multiple locations. The 
+		 first one found will be used.
+		 </apiDesc></apiOperationDetail></apiOperation><apiOperation id="flashx.textLayout.conversion:TextConverter:export"><apiName>export</apiName><shortdesc> 
+		 Exports a TextFlow to a specified format.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiOperationDetail><apiOperationDef><apiAccess value="public"/><apiStatic/><apiReturn><apiDesc>Object	Exported form of the TextFlow, or null on errors
+		 </apiDesc><apiType value="Object"/></apiReturn><apiParam><apiItemName>source</apiItemName><apiOperationClassifier>flashx.textLayout.elements:TextFlow</apiOperationClassifier><apiDesc>Source content
+		 </apiDesc></apiParam><apiParam><apiItemName>format</apiItemName><apiType value="String"/><apiDesc>Output format
+		 </apiDesc></apiParam><apiParam><apiItemName>conversionType</apiItemName><apiType value="String"/><apiDesc>Type of exported data
+		 </apiDesc></apiParam></apiOperationDef><apiDesc> 
+		 Exports a TextFlow to a specified format. 
+		 <p>Use one of the static constants supplied with this class, a MIME type,
+		 or a user defined format for user defined exporters to specify 
+		 the <codeph>format</codeph> parameter:
+		 <ul>
+		 <li>TextConverter.TEXT_FIELD_HTML_FORMAT</li>
+		 <li>TextConverter.PLAIN_TEXT_FORMAT</li>
+		 <li>TextConverter.TEXT_LAYOUT_FORMAT</li>
+		 </ul>
+		 </p>
+		 <p>Specify the type of the exported data in the <codeph>conversionType</codeph> parameter 
+		 with one of the static constants supplied by the ConversionType class, or a user defined
+		 data type for user defined exporters:
+		 <ul>
+		 <li>ConversionType.STRING_TYPE</li>
+		 <li>ConversionType.XML_TYPE</li>
+		 </ul>
+		 </p>
+		 
+		 Returns a representation of the TextFlow in the specified format, or null on errors.
+		 </apiDesc></apiOperationDetail><related-links><link href="flashx.textLayout.conversion.xml#TextConverter/TEXT_FIELD_HTML_FORMAT"><linktext>TEXT_FIELD_HTML_FORMAT</linktext></link><link href="flashx.textLayout.conversion.xml#TextConverter/PLAIN_TEXT_FORMAT"><linktext>PLAIN_TEXT_FORMAT</linktext></link><link href="flashx.textLayout.conversion.xml#TextConverter/TEXT_LAYOUT_FORMAT"><linktext>TEXT_LAYOUT_FORMAT</linktext></link><link href="flashx.textLayout.conversion.xml#ConversionType"><linktext>flashx.textLayout.conversion.ConversionType</linktext></link></related-links></apiOperation><apiOperation id="flashx.textLayout.conversion:TextConverter:getExporter"><apiName>getExporter</apiName><shortdesc> 
+		 Creates and returns an export converter, which you can then use to export from 
+		 a TextFlow to a source string or XML object.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiOperationDetail><apiOperationDef><apiAccess value="public"/><apiStatic/><apiReturn><apiDesc>ITextExporter	Text exporter that can export in the specified format
+		 </apiDesc><apiOperationClassifier>flashx.textLayout.conversion:ITextExporter</apiOperationClassifier></apiReturn><apiParam><apiItemName>format</apiItemName><apiType value="String"/><apiDesc>Target format for exported data
+		 </apiDesc></apiParam></apiOperationDef><apiDesc> 
+		 Creates and returns an export converter, which you can then use to export from 
+		 a TextFlow to a source string or XML object. Use this function if 
+		 you have many separate exports to perform. It is equivalent to calling 
+		 <codeph>flashx.textLayout.conversion.TextConverter.export()</codeph>.
+		 <p>Use one of the static constants supplied with this class
+		 to specify the <codeph>format</codeph> parameter:
+		 <ul>
+		 <li>TextConverter.TEXT_FIELD_HTML_FORMAT</li>
+		 <li>TextConverter.PLAIN_TEXT_FORMAT</li>
+		 <li>TextConverter.TEXT_LAYOUT_FORMAT</li>
+		 </ul>
+		 </p>
+		 <p>If the format has been added multiple times, the first one found will be used.</p>
+		 </apiDesc><example conref="examples\getExporter_example.as"/></apiOperationDetail><related-links><link href="flashx.textLayout.conversion.xml#TextConverter/TEXT_FIELD_HTML_FORMAT"><linktext>TEXT_FIELD_HTML_FORMAT</linktext></link><link href="flashx.textLayout.conversion.xml#TextConverter/PLAIN_TEXT_FORMAT"><linktext>PLAIN_TEXT_FORMAT</linktext></link><link href="flashx.textLayout.conversion.xml#TextConverter/TEXT_LAYOUT_FORMAT"><linktext>TEXT_LAYOUT_FORMAT</linktext></link></related-links></apiOperation><apiOperation id="flashx.textLayout.conversion:TextConverter:getFormatAt"><apiName>getFormatAt</apiName><shortdesc> Returns the format name for the index'th format.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiOperationDetail><apiOperationDef><apiAccess value="public"/><apiStatic/><apiReturn><apiType value="String"/></apiReturn><apiParam><apiItemName>index</apiItemName><apiType value="int"/></apiParam></apiOperationDef><apiDesc> Returns the format name for the index'th format.
+		 </apiDesc></apiOperationDetail></apiOperation><apiOperation id="flashx.textLayout.conversion:TextConverter:getFormatDescriptorAt"><apiName>getFormatDescriptorAt</apiName><shortdesc> Returns the FormatDescriptor for the index'th format.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiOperationDetail><apiOperationDef><apiAccess value="public"/><apiStatic/><apiReturn><apiOperationClassifier>flashx.textLayout.conversion:FormatDescriptor</apiOperationClassifier></apiReturn><apiParam><apiItemName>index</apiItemName><apiType value="int"/></apiParam></apiOperationDef><apiDesc> Returns the FormatDescriptor for the index'th format. 
+		</apiDesc></apiOperationDetail></apiOperation><apiOperation id="flashx.textLayout.conversion:TextConverter:getImporter"><apiName>getImporter</apiName><shortdesc> 
+		 Creates and returns an import converter, which you can then use to import from a 
+		 source string, an XML object, or any user defined data formats to a TextFlow.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiOperationDetail><apiOperationDef><apiAccess value="public"/><apiStatic/><apiReturn><apiDesc>ITextImporter	Text importer that can import the source data
+		 </apiDesc><apiOperationClassifier>flashx.textLayout.conversion:ITextImporter</apiOperationClassifier></apiReturn><apiParam><apiItemName>format</apiItemName><apiType value="String"/><apiDesc>Format of source content. Use constants from 
+		 					flashx.textLayout.conversion.TextConverter.TEXT_LAYOUT_FORMAT, PLAIN_TEXT_FORMAT, TEXT_FIELD_HTML_FORMAT etc,
+		 					a MIME type, or a user defined format.
+		 </apiDesc></apiParam><apiParam><apiItemName>config</apiItemName><apiOperationClassifier>flashx.textLayout.elements:IConfiguration</apiOperationClassifier><apiData>null</apiData><apiDesc>   configuration to use during this import. null means take the current default.
+		 					You can also set the configuration via the <codeph>ITextImporter.configuration</codeph>
+		 					property.
+		 </apiDesc></apiParam></apiOperationDef><apiDesc> 
+		 Creates and returns an import converter, which you can then use to import from a 
+		 source string, an XML object, or any user defined data formats to a TextFlow. 
+		 Use this method if you have many separate imports to perform, or if you want to 
+		 handle errors during import. It is equivalent to calling 
+		 <codeph>flashx.textLayout.conversion.TextConverter.importToFlow()</codeph>.
+		 <p>Use one of the static constants supplied with this class
+		 to specify the <codeph>format</codeph> parameter, a MIME type, or a user defined
+		 data format.
+		 <ul>
+		 <li>TextConverter.TEXT_FIELD_HTML_FORMAT</li>
+		 <li>TextConverter.PLAIN_TEXT_FORMAT</li>
+		 <li>TextConverter.TEXT_LAYOUT_FORMAT</li>
+		 </ul>
+		 </p>
+		 <p>If the format has been added multiple times, the first one found will be used.</p>
+		 </apiDesc><example conref="examples\getImporter_example.as"/></apiOperationDetail><related-links><link href="flashx.textLayout.conversion.xml#TextConverter/TEXT_FIELD_HTML_FORMAT"><linktext>TEXT_FIELD_HTML_FORMAT</linktext></link><link href="flashx.textLayout.conversion.xml#TextConverter/PLAIN_TEXT_FORMAT"><linktext>PLAIN_TEXT_FORMAT</linktext></link><link href="flashx.textLayout.conversion.xml#TextConverter/TEXT_LAYOUT_FORMAT"><linktext>TEXT_LAYOUT_FORMAT</linktext></link></related-links></apiOperation><apiOperation id="flashx.textLayout.conversion:TextConverter:importToFlow"><apiName>importToFlow</apiName><shortdesc> 
+		 Creates a TextFlow from source content in a specified format.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiOperationDetail><apiOperationDef><apiAccess value="public"/><apiStatic/><apiReturn><apiDesc>TextFlow that was created from the source, or null on errors.
+		 </apiDesc><apiOperationClassifier>flashx.textLayout.elements:TextFlow</apiOperationClassifier></apiReturn><apiParam><apiItemName>source</apiItemName><apiType value="Object"/><apiDesc>Source content
+		 </apiDesc></apiParam><apiParam><apiItemName>format</apiItemName><apiType value="String"/><apiDesc>Format of source content
+		 </apiDesc></apiParam><apiParam><apiItemName>config</apiItemName><apiOperationClassifier>flashx.textLayout.elements:IConfiguration</apiOperationClassifier><apiData>null</apiData><apiDesc>   IConfiguration to use when creating new TextFlows
+		 </apiDesc></apiParam></apiOperationDef><apiDesc> 
+		 Creates a TextFlow from source content in a specified format.
+		 <p>Use one of the static constants supplied with this class, a MIME type,
+		 to specify the <codeph>format</codeph> parameter, or use a user defined
+		 value for user-registered importers:
+		 <ul>
+		 <li>TextConverter.TEXT_FIELD_HTML_FORMAT</li>
+		 <li>TextConverter.PLAIN_TEXT_FORMAT</li>
+		 <li>TextConverter.TEXT_LAYOUT_FORMAT</li>
+		 </ul>
+		 </p>
+		 </apiDesc></apiOperationDetail><related-links><link href="flashx.textLayout.conversion.xml#TextConverter/TEXT_FIELD_HTML_FORMAT"><linktext>TEXT_FIELD_HTML_FORMAT</linktext></link><link href="flashx.textLayout.conversion.xml#TextConverter/PLAIN_TEXT_FORMAT"><linktext>PLAIN_TEXT_FORMAT</linktext></link><link href="flashx.textLayout.conversion.xml#TextConverter/TEXT_LAYOUT_FORMAT"><linktext>TEXT_LAYOUT_FORMAT</linktext></link></related-links></apiOperation><apiOperation id="flashx.textLayout.conversion:TextConverter:removeFormatAt"><apiName>removeFormatAt</apiName><shortdesc>
+		 Remove the format at the index location.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiOperationDetail><apiOperationDef><apiAccess value="public"/><apiStatic/><apiReturn><apiType value="void"/></apiReturn><apiParam><apiItemName>index</apiItemName><apiType value="int"/><apiDesc>    The format to remove
+		 </apiDesc></apiParam></apiOperationDef><apiDesc>
+		 Remove the format at the index location. 
+		 
+		 </apiDesc></apiOperationDetail></apiOperation><apiOperation id="flashx.textLayout.conversion:TextConverter:removeFormat"><apiName>removeFormat</apiName><shortdesc>
+		 Remove the format.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiOperationDetail><apiOperationDef><apiAccess value="public"/><apiStatic/><apiReturn><apiType value="void"/></apiReturn><apiParam><apiItemName>format</apiItemName><apiType value="String"/><apiDesc>    The converter format string to remove
+		 </apiDesc></apiParam></apiOperationDef><apiDesc>
+		 Remove the format. 
+		 If a format was added multiple times, only the first one found is removed.
+		 
+		 </apiDesc></apiOperationDetail></apiOperation><apiValue id="flashx.textLayout.conversion:TextConverter:PLAIN_TEXT_FORMAT"><apiName>PLAIN_TEXT_FORMAT</apiName><shortdesc> 
+		 Plain text format.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiValueDetail><apiValueDef><apiAccess value="public"/><apiStatic/><apiData>plainTextFormat</apiData><apiType value="String"/></apiValueDef><apiDesc> 
+		 Plain text format.
+		 Use this for creating a TextFlow from a simple, unformatted String, 
+		 or for creating a simple, unformatted String from a TextFlow.
+		 </apiDesc></apiValueDetail></apiValue><apiValue id="flashx.textLayout.conversion:TextConverter:TEXT_FIELD_HTML_FORMAT"><apiName>TEXT_FIELD_HTML_FORMAT</apiName><shortdesc> 
+		 HTML format.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiValueDetail><apiValueDef><apiAccess value="public"/><apiStatic/><apiData>textFieldHTMLFormat</apiData><apiType value="String"/></apiValueDef><apiDesc> 
+		 HTML format.
+		 Use this for importing from, or exporting to, a TextFlow using the HTML fomat.
+		 The Text Layout Framework HTML supports a subset of the tags and attributes supported by
+		 the TextField class in the <codeph>flash.text</codeph> package.
+		 <p>The following table lists the HTML tags and attributes supported for the import
+		 and export process (tags and attributes supported by TextField, but not supported by 
+		 the Text Layout Framework are specifically described as not supported):</p>
+		 
+		 
+		 <adobetable class="innertable">
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 <tgroup cols="2"><thead><row><entry>
+		 Tag
+		 </entry><entry>
+		 Description
+		 </entry></row></thead><tbody><row>
+		 
+		 <entry>
+		 Anchor tag
+		 </entry>
+		 
+		 <entry>
+		 The <codeph>&lt;a&gt;</codeph> tag creates a hypertext link and supports the following attributes:
+		 <ul>
+		 
+		 <li>
+		 <codeph>target</codeph>: Specifies the name of the target window where you load the page. 
+		 Options include <codeph>_self</codeph>, <codeph>_blank</codeph>, <codeph>_parent</codeph>, and 
+		 <codeph>_top</codeph>. The <codeph>_self</codeph> option specifies the current frame in the current window, 
+		 <codeph>_blank</codeph> specifies a new window, <codeph>_parent</codeph> specifies the parent of the 
+		 current frame, and <codeph>_top</codeph> specifies the top-level frame in the current window. 
+		 </li>
+		 
+		 <li>
+		 <codeph>href</codeph>: Specifies a URL. The URL can 
+		 be either absolute or relative to the location of the SWF file that 
+		 is loading the page. An example of an absolute reference to a URL is 
+		 <codeph>http://www.adobe.com</codeph>; an example of a relative reference is 
+		 <codeph>/index.html</codeph>. Absolute URLs must be prefixed with 
+		 http://; otherwise, Flash treats them as relative URLs. 
+		 <b>Note: Unlike the TextField class, </b>ActionScript <codeph>link</codeph> events 
+		 are not supported. Neither are
+		 <codeph>a:link</codeph>, <codeph>a:hover</codeph>, and <codeph>a:active</codeph> styles.
+		 </li>
+		 
+		 </ul>
+		 
+		 </entry>
+		 </row><row>
+		 
+		 <entry>
+		 Bold tag
+		 </entry>
+		 
+		 <entry>
+		 The <codeph>&lt;b&gt;</codeph> tag renders text as bold. A bold typeface must be available for the font used.
+		 </entry>
+		 </row><row>
+		 
+		 <entry>
+		 Break tag
+		 </entry>
+		 <entry>
+		 The <codeph>&lt;br&gt;</codeph> tag creates a line break in the text.
+		 </entry>
+		 </row><row>
+		 
+		 <entry>
+		 Font tag
+		 </entry>
+		 
+		 <entry>
+		 The <codeph>&lt;font&gt;</codeph> tag specifies a font or list of fonts to display the text.The font tag 
+		 supports the following attributes:
+		 <ul>
+		 
+		 <li>
+		 <codeph>color</codeph>: Only hexadecimal color (<codeph>#FFFFFF</codeph>) values are supported. 
+		 </li>
+		 
+		 <li>
+		 <codeph>face</codeph>: Specifies the name of the font to use. As shown in the following example, 
+		 you can specify a list of comma-delimited font names, in which case Flash Player selects the first available 
+		 font. If the specified font is not installed on the local computer system or isn't embedded in the SWF file, 
+		 Flash Player selects a substitute font. 
+		 </li>
+		 
+		 <li>
+		 <codeph>size</codeph>: Specifies the size of the font. You can use absolute pixel sizes, such as 16 or 18 
+		 or relative point sizes, such as +2 or -4. 
+		 </li>
+		 
+		 <li>
+		 <codeph>letterspacing</codeph>: Specifies the tracking (manual kerning) in pixels to be applied to the right of each character. 
+		 </li>
+		 
+		 <li>
+		 <codeph>kerning</codeph>: Specifies whether kerning is enabled or disabled. A non-zero value enables kerning, while zero disables it.  
+		 </li>
+		 
+		 </ul>
+		 
+		 </entry>
+		 </row><row>
+		 
+		 <entry>
+		 Image tag
+		 </entry>
+		 
+		 <entry>
+		 The <codeph>&lt;img&gt;</codeph> tag lets you embed external image files (JPEG, GIF, PNG), SWF files, and 
+		 movie clips inside text.  
+		 
+		  <p>The <codeph>&lt;img&gt;</codeph> tag supports the following attributes: </p>
+		 
+		 <ul>
+		 
+		 <li>
+		 <codeph>src</codeph>: Specifies the URL to an image or SWF file, or the linkage identifier for a movie clip 
+		 symbol in the library. This attribute is required; all other attributes are optional. External files (JPEG, GIF, PNG, 
+		 and SWF files) do not show until they are downloaded completely. 
+		 </li>
+		 
+		 <li>
+		 <codeph>width</codeph>: The width of the image, SWF file, or movie clip being inserted, in pixels. 
+		 </li>
+		 
+		 <li>
+		 <codeph>height</codeph>: The height of the image, SWF file, or movie clip being inserted, in pixels. 
+		 </li>
+		 </ul>
+		 <p><b>Note: </b> Unlike the TextField class, the following attributes are not supported:
+		 <codeph>align</codeph>, <codeph>hspace</codeph>, <codeph>vspace</codeph>,  <codeph>id</codeph>, and <codeph>checkPolicyFile</codeph>.</p>
+		 
+		 </entry>
+		 </row><row>
+		 
+		 <entry>
+		 Italic tag
+		 </entry>
+		 
+		 <entry>
+		 The <codeph>&lt;i&gt;</codeph> tag displays the tagged text in italics. An italic typeface must be available 
+		 for the font used.
+		 </entry>
+		 </row><row>
+		 
+		 <entry>
+		 <i>List item tag</i>
+		 </entry>
+		 
+		 <entry>
+		 <b>Note: </b> Unlike the TextField class, the List item tag is not supported.
+		 </entry>
+		 </row><row>
+		 
+		 <entry>
+		 Paragraph tag
+		 </entry>
+		 
+		 <entry>
+		 The <codeph>&lt;p&gt;</codeph> tag creates a new paragraph. 
+		 
+		 The <codeph>&lt;p&gt;</codeph> tag supports the following attributes:
+		 <ul>
+		 
+		 <li>
+		 align: Specifies alignment of text within the paragraph; valid values are <codeph>left</codeph>, <codeph>right</codeph>, <codeph>justify</codeph>, and <codeph>center</codeph>. 
+		 </li>
+		 
+		 <li>
+		 class: Specifies a class name that can be used for styling 
+		 </li>
+		 
+		 </ul>
+		 
+		 </entry>
+		 </row><row>
+		 
+		 <entry>
+		 Span tag
+		 </entry>
+		 
+		 <entry>
+		 
+		 The <codeph>&lt;span&gt;</codeph> tag supports the following attributes:
+		 
+		 <ul>
+		 
+		 <li>
+		 class: Specifies a class name that can be used for styling. While span tags are often used to set a style defined in a style sheet,
+		 TLFTextField instances do not support style sheets. The span tag is available for TLFTextField instances to refer to a class with 
+		 style properties.</li>
+		 <li> You can also put properties directly in the span tag: 
+		 <codeph>&lt;span fontFamily="Arial"&gt;Hi there&lt;/span&gt;</codeph>. However, nested span tags are not supported.
+		 </li>
+		 
+		 </ul>
+		 
+		 </entry>
+		 </row><row>
+		 
+		 <entry>
+		 Text format tag
+		 </entry>
+		 
+		 <entry>
+		  <p>The <codeph>&lt;textformat&gt;</codeph> tag lets you use a subset of paragraph formatting 
+		 properties of the TextFormat class within text fields, including line leading, indentation, 
+		 margins, and tab stops. You can combine <codeph>&lt;textformat&gt;</codeph> tags with the 
+		 built-in HTML tags. </p>
+		 
+		  <p>The <codeph>&lt;textformat&gt;</codeph> tag has the following attributes: </p>
+		 <ul>
+		 
+		 
+		 <li>
+		 <codeph>indent</codeph>: Specifies the indentation from the left margin to the first character 
+		 in the paragraph; corresponds to <codeph>TextFormat.indent</codeph>. Both positive and negative 
+		 numbers are acceptable. 
+		 </li>
+		 
+		 <li>
+		 <codeph>blockindent</codeph>: Specifies the indentation applied to all lines of the paragraph.
+		 </li>
+		 
+		 <li>
+		 <codeph>leftmargin</codeph>: Specifies the left margin of the paragraph, in points; corresponds 
+		 to <codeph>TextFormat.leftMargin</codeph>. 
+		 </li>
+		 
+		 <li>
+		 <codeph>rightmargin</codeph>: Specifies the right margin of the paragraph, in points; corresponds 
+		 to <codeph>TextFormat.rightMargin</codeph>. 
+		 </li>
+		 
+		 	<li>
+		 <codeph>leading</codeph>: Specifies the leading (line height) measured in pixels between a line's ascent and the previous line's descent
+		 </li>
+		 
+		 	<li>
+		 <codeph>tabstops</codeph>: Specifies a comma-separated list of tab stop positions for the paragraph. 
+		 </li>
+		 </ul>
+		 
+		 </entry>
+		 </row><row>
+		 
+		 <entry>
+		 Underline tag
+		 </entry>
+		 
+		 <entry>
+		 The <codeph>&lt;u&gt;</codeph> tag underlines the tagged text.
+		 </entry>
+		 </row></tbody></tgroup></adobetable>
+		 
+		 <p>When an unknown tag is imported the <codeph>textFieldHTMLFormat</codeph> importer will either set a single FlowElement's typeName property to that tag name
+		 or create a DivElement or a SubParagraphGroupElement with its typeName property set to the tag name.</p>
+		 <p>The <codeph>textFieldHTMLFormat</codeph> exporter will export <codeph>typeName</codeph> as the XML tag when it is different from the default.</p>
+		 
+		 </apiDesc></apiValueDetail><related-links><link href="flashx.textLayout.elements.xml#FlowElement/typeName"><linktext>flashx.textLayout.elements.FlowElement.typeName</linktext></link></related-links></apiValue><apiValue id="flashx.textLayout.conversion:TextConverter:TEXT_LAYOUT_FORMAT"><apiName>TEXT_LAYOUT_FORMAT</apiName><shortdesc> 
+		 TextLayout Format.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiValueDetail><apiValueDef><apiAccess value="public"/><apiStatic/><apiData>textLayoutFormat</apiData><apiType value="String"/></apiValueDef><apiDesc> 
+		 TextLayout Format.
+		 Use this for importing from, or exporting to, a TextFlow using the TextLayout markup format.
+		 Text Layout format will detect the following errors:
+		 <ul>
+		 <li>Unexpected namespace</li>
+		 <li>Unknown element</li>
+		 <li>Unknown attribute</li>
+		 </ul>
+		 </apiDesc></apiValueDetail></apiValue><apiValue id="flashx.textLayout.conversion:TextConverter:numFormats:get"><apiName>numFormats</apiName><shortdesc> Number of formats.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiValueDetail><apiValueDef><apiProperty/><apiAccess value="public"/><apiStatic/><apiValueAccess value="read"/><apiType value="int"/></apiValueDef><apiDesc> Number of formats.
+		</apiDesc></apiValueDetail></apiValue></apiClassifier><apiClassifier id="flashx.textLayout.conversion:ITextLayoutImporter"><apiName>ITextLayoutImporter</apiName><shortdesc> This interface should be implemented by converters that import TextLayout structured data.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10.0"/><apiPlatform description="" name="AIR" version="2.0"/></apiVersion></asMetadata></prolog><apiClassifierDetail><apiClassifierDef><apiInterface/><apiAccess value="public"/><apiStatic/><apiBaseInterface>flashx.textLayout.conversion:ITextImporter</apiBaseInterface><apiBaseClassifier/></apiClassifierDef><apiDesc> This interface should be implemented by converters that import TextLayout structured data. Clients that have explicitly
+	 created an importer using TextConverter.getImporter may control the import process by calling into these methods on the 
+	 importer.
+	 
+	 </apiDesc></apiClassifierDetail><apiValue id="flashx.textLayout.conversion:ITextLayoutImporter:flashx.textLayout.conversion:ITextLayoutImporter:imageSourceResolveFunction:get"><apiName>imageSourceResolveFunction</apiName><shortdesc> This property allows specification of a function to modify the source property supplied to an &amp;lt;img&amp;gt; element.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10.0"/><apiPlatform description="" name="AIR" version="2.0"/></apiVersion></asMetadata></prolog><apiValueDetail><apiValueDef><apiProperty/><apiAccess value="public"/><apiDynamic/><apiValueAccess value="readwrite"/><apiType value="Function"/></apiValueDef><apiDesc> This property allows specification of a function to modify the source property supplied to an <codeph>&lt;img&gt;</codeph> element. 
+		 Sample use would be to modify relative paths to some caller specified root path.  The function takes the string set in the markup and returns the actual string
+		 to be used.  
+		 
+		 <p>Note that by default relative paths are relative to the loaded SWF.  One use of this function is to make relative paths relative to some other location.</p>
+		 
+		 <p>The resolver function should look like this:</p>
+		 <codeph>function resolver(src:String):String</codeph>
+		 <p>It takes as an input parameter the value of src on the incoming img element, and returns the adjusted value.</p>
+		 
+		 </apiDesc></apiValueDetail></apiValue></apiClassifier><apiClassifier id="flashx.textLayout.conversion:ITextImporter"><apiName>ITextImporter</apiName><shortdesc> 
+     Interface for importing text content into a TextFlow from an external source.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiClassifierDetail><apiClassifierDef><apiInterface/><apiAccess value="public"/><apiStatic/><apiBaseClassifier/></apiClassifierDef><apiDesc> 
+     Interface for importing text content into a TextFlow from an external source. 
+     The TextConverter class creates importers with no constructor arguments.
+     
+     </apiDesc><example conref="examples\ITextImporterExample.as"/></apiClassifierDetail><related-links><link href="flashx.textLayout.elements.xml#TextFlow"><linktext>flashx.textLayout.elements.TextFlow</linktext></link></related-links><apiOperation id="flashx.textLayout.conversion:ITextImporter:flashx.textLayout.conversion:ITextImporter:importToFlow"><apiName>importToFlow</apiName><shortdesc> 
+         Import text content from an external source and convert it into a TextFlow.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiOperationDetail><apiOperationDef><apiAccess value="public"/><apiReturn><apiDesc>TextFlow Created from the source.
+         
+         </apiDesc><apiOperationClassifier>flashx.textLayout.elements:TextFlow</apiOperationClassifier></apiReturn><apiParam><apiItemName>source</apiItemName><apiType value="Object"/><apiDesc>       The data to convert.
+         </apiDesc></apiParam></apiOperationDef><apiDesc> 
+         Import text content from an external source and convert it into a TextFlow.
+         </apiDesc></apiOperationDetail></apiOperation><apiValue id="flashx.textLayout.conversion:ITextImporter:flashx.textLayout.conversion:ITextImporter:configuration:get"><apiName>configuration</apiName><shortdesc>
+         The configuration property contains the IConfiguration instance that
+         the importer needs when creating new TextFlow instances.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10.2"/><apiPlatform description="" name="AIR" version="2.0"/></apiVersion></asMetadata></prolog><apiValueDetail><apiValueDef><apiProperty/><apiAccess value="public"/><apiDynamic/><apiValueAccess value="readwrite"/><apiValueClassifier>flashx.textLayout.elements:IConfiguration</apiValueClassifier></apiValueDef><apiDesc>
+         The <codeph>configuration</codeph> property contains the IConfiguration instance that
+         the importer needs when creating new TextFlow instances. This property
+         is initially set to <codeph>null</codeph>.
+         
+         </apiDesc></apiValueDetail><related-links><link href="flashx.textLayout.elements.xml#TextFlow"><linktext>flashx.textLayout.elements.TextFlow</linktext></link></related-links></apiValue><apiValue id="flashx.textLayout.conversion:ITextImporter:flashx.textLayout.conversion:ITextImporter:errors:get"><apiName>errors</apiName><shortdesc> 
+         This property contains a vector of error messages as strings after a call
+         to an importer method is the throwOnError property is set to
+         false, which is the default.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiValueDetail><apiValueDef><apiProperty/><apiAccess value="public"/><apiDynamic/><apiValueAccess value="read"/><apiType value="Vector$String"/></apiValueDef><apiDesc> 
+         This property contains a vector of error messages as strings after a call
+         to an importer method is the <codeph>throwOnError</codeph> property is set to
+         <codeph>false</codeph>, which is the default. If there were no errors, the
+         property returns <codeph>null</codeph>. The property is reset on each method
+         call.
+         
+         </apiDesc></apiValueDetail></apiValue><apiValue id="flashx.textLayout.conversion:ITextImporter:flashx.textLayout.conversion:ITextImporter:throwOnError:get"><apiName>throwOnError</apiName><shortdesc> 
+         The throwOnError property controls how the importer handles errors.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiValueDetail><apiValueDef><apiProperty/><apiAccess value="public"/><apiDynamic/><apiValueAccess value="readwrite"/><apiType value="Boolean"/></apiValueDef><apiDesc> 
+         The <codeph>throwOnError</codeph> property controls how the importer handles errors.
+         If set to <codeph>true</codeph>, methods throw an Error instance on errors. 
+         If set to <codeph>false</codeph>, which is the default, errors are collected
+         into a vector of strings and stored in the <codeph>errors</codeph> property, 
+         and the importer does not throw. 
+         
+         </apiDesc></apiValueDetail></apiValue><apiValue id="flashx.textLayout.conversion:ITextImporter:flashx.textLayout.conversion:ITextImporter:useClipboardAnnotations:get"><apiName>useClipboardAnnotations</apiName><shortdesc> 
+         Controls whether or not the 
+         importer should handle the extra information necessary for the clipboard.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiValueDetail><apiValueDef><apiProperty/><apiAccess value="public"/><apiDynamic/><apiValueAccess value="readwrite"/><apiType value="Boolean"/></apiValueDef><apiDesc> 
+         Controls whether or not the 
+         importer should handle the extra information necessary for the clipboard. 
+         When data comes in from the clipboard, it might contain partial paragraphs; 
+         paragraphs that are missing the terminator or newline character. If <codeph>useClipboardAnnotations</codeph> 
+         is <codeph>true</codeph>, the importer marks these partial paragraphs with a 
+         <codeph>ConverterBase.MERGE_TO_NEXT_ON_PASTE</codeph> attribute. This causes the paste
+         operation to correctly handle merging of the pasted paragraph (and any list or div elements
+         that may include the paragraph) into the text.
+          
+         </apiDesc></apiValueDetail><related-links><link href="" invalidHref="flashx.textLayout.conversion.ConverterBase.MERGE_TO_NEXT_ON_PASTE.xml"><linktext>flashx.textLayout.conversion.ConverterBase.MERGE_TO_NEXT_ON_PASTE</linktext></link></related-links></apiValue></apiClassifier><apiClassifier id="flashx.textLayout.conversion:PlainTextExporter"><apiName>PlainTextExporter</apiName><shortdesc> 
+	 Export converter for plain text format.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiClassifierDetail><apiClassifierDef><apiAccess value="public"/><apiStatic/><apiBaseInterface>flashx.textLayout.conversion:IPlainTextExporter</apiBaseInterface><apiBaseClassifier>flashx.textLayout.conversion:ConverterBase</apiBaseClassifier></apiClassifierDef><apiDesc> 
+	 Export converter for plain text format. This class provides an alternative to
+	 the <codeph>TextConverter.export()</codeph> static method for exporting plain text.
+	  The PlainTextExporter class's <codeph>export()</codeph> method results in the 
+	 same output string as the <codeph>TextConverter.export()</codeph> static method 
+	 if the two properties of the PlainTextExporter class, the <codeph>PARAGRAPH_SEPARATOR_PROPERTY</codeph>
+	 and the <codeph>STRIP_DISCRETIONARY_HYPHENS_PROPERTY</codeph> properties, contain their
+	 default values of <codeph>"\n"</codeph> and <codeph>true</codeph>, respectively.
+	 </apiDesc><example conref="examples\PlainTextExporter_example.as"/></apiClassifierDetail><apiConstructor id="flashx.textLayout.conversion:PlainTextExporter:PlainTextExporter"><apiName>PlainTextExporter</apiName><shortdesc>
+		 Constructor 
+		 </shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiConstructorDetail><apiConstructorDef><apiAccess value="public"/></apiConstructorDef><apiDesc>
+		 Constructor 
+		 </apiDesc></apiConstructorDetail></apiConstructor><apiOperation id="flashx.textLayout.conversion:PlainTextExporter:export"><apiName>export</apiName><shortdesc conref="ITextExporter#export()"> </shortdesc><prolog/><apiOperationDetail><apiOperationDef><apiAccess value="public"/><apiReturn><apiType value="Object"/><apiDesc>Object	The exported content
+		 </apiDesc></apiReturn><apiParam><apiItemName>source</apiItemName><apiOperationClassifier>flashx.textLayout.elements:TextFlow</apiOperationClassifier><apiDesc>The TextFlow to export
+		 </apiDesc></apiParam><apiParam><apiItemName>conversionType</apiItemName><apiType value="String"/><apiDesc>	Return a String (STRING_TYPE) or XML (XML_TYPE), or any user defined format.
+		 </apiDesc></apiParam></apiOperationDef><apiDesc conref="ITextExporter#export()"> </apiDesc></apiOperationDetail></apiOperation><apiValue id="flashx.textLayout.conversion:PlainTextExporter:paragraphSeparator:get"><apiName>paragraphSeparator</apiName><shortdesc conref="IPlainTextExporter#paragraphSeparator"> </shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiValueDetail><apiValueDef><apiProperty/><apiAccess value="public"/><apiDynamic/><apiValueAccess value="readwrite"/><apiType value="String"/></apiValueDef><apiDesc conref="IPlainTextExporter#paragraphSeparator"> </apiDesc></apiValueDetail></apiValue><apiValue id="flashx.textLayout.conversion:PlainTextExporter:stripDiscretionaryHyphens:get"><apiName>stripDiscretionaryHyphens</apiName><shortdesc conref="IPlainTextExporter#stripDiscretionaryHyphens"> </shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0-"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiValueDetail><apiValueDef><apiProperty/><apiAccess value="public"/><apiDynamic/><apiValueAccess value="readwrite"/><apiType value="Boolean"/></apiValueDef><apiDesc conref="IPlainTextExporter#stripDiscretionaryHyphens"> </apiDesc></apiValueDetail></apiValue></apiClassifier><apiClassifier id="flashx.textLayout.conversion:IHTMLImporter"><apiName>IHTMLImporter</apiName><shortdesc> This interface should be implemented by converters that import HTML or HTML-structured data.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10.0"/><apiPlatform description="" name="AIR" version="2.0"/></apiVersion></asMetadata></prolog><apiClassifierDetail><apiClassifierDef><apiInterface/><apiAccess value="public"/><apiStatic/><apiBaseInterface>flashx.textLayout.conversion:ITextImporter</apiBaseInterface><apiBaseClassifier/></apiClassifierDef><apiDesc> This interface should be implemented by converters that import HTML or HTML-structured data. Clients that have explicitly
+	 created an importer using TextConverter.getImporter may control the import process by calling into these methods on the 
+	 importer.
+	 
+	 </apiDesc></apiClassifierDetail><apiValue id="flashx.textLayout.conversion:IHTMLImporter:flashx.textLayout.conversion:IHTMLImporter:imageSourceResolveFunction:get"><apiName>imageSourceResolveFunction</apiName><shortdesc> This property allows specification of a function to modify the source property supplied to an &amp;lt;img&amp;gt; element.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10.0"/><apiPlatform description="" name="AIR" version="2.0"/></apiVersion></asMetadata></prolog><apiValueDetail><apiValueDef><apiProperty/><apiAccess value="public"/><apiDynamic/><apiValueAccess value="readwrite"/><apiType value="Function"/></apiValueDef><apiDesc> This property allows specification of a function to modify the source property supplied to an <codeph>&lt;img&gt;</codeph> element. 
+		 Sample use would be to modify relative paths to some caller specified root path.  The function takes the string set in the markup and returns the actual string
+		 to be used.  
+		 
+		 <p>Note that by default relative paths are relative to the loaded SWF.  One use of this function is to make relative paths relative to some other location.</p>
+		 
+		 <p>The resolver function should look like this:</p>
+		 <codeph>function resolver(src:String):String</codeph>
+		 <p>It takes as an input parameter the value of src on the incoming img element, and returns the adjusted value.</p>
+		 
+		 </apiDesc></apiValueDetail></apiValue><apiValue id="flashx.textLayout.conversion:IHTMLImporter:flashx.textLayout.conversion:IHTMLImporter:preserveBodyElement:get"><apiName>preserveBodyElement</apiName><shortdesc> This property tells the importer to create an element for the BODY tag in HTML markup.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10.0"/><apiPlatform description="" name="AIR" version="2.0"/></apiVersion></asMetadata></prolog><apiValueDetail><apiValueDef><apiProperty/><apiAccess value="public"/><apiDynamic/><apiValueAccess value="readwrite"/><apiType value="Boolean"/></apiValueDef><apiDesc> This property tells the importer to create an element for the <codeph>BODY</codeph> tag in HTML markup.
+		 
+		 <p>The element will normally be a <codeph>DivElement</codeph> with <codeph>typeName</codeph> set to <codeph>BODY</codeph>.</p>
+		 <p>This will also trigger parsing of <codeph>class</codeph> and <codeph>id</codeph> on the element.</p>
+		 
+		 </apiDesc></apiValueDetail></apiValue><apiValue id="flashx.textLayout.conversion:IHTMLImporter:flashx.textLayout.conversion:IHTMLImporter:preserveHTMLElement:get"><apiName>preserveHTMLElement</apiName><shortdesc> This property tells the importer to create an element for the HTML tag in HTML markup.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10.0"/><apiPlatform description="" name="AIR" version="2.0"/></apiVersion></asMetadata></prolog><apiValueDetail><apiValueDef><apiProperty/><apiAccess value="public"/><apiDynamic/><apiValueAccess value="readwrite"/><apiType value="Boolean"/></apiValueDef><apiDesc> This property tells the importer to create an element for the <codeph>HTML</codeph> tag in HTML markup.
+		 
+		 <p>The element will normally be the top-level <codeph>TextFlow</codeph> element with <codeph>typeName</codeph> set to <codeph>HTML</codeph>.</p>
+		 <p>This will also trigger parsing of <codeph>class</codeph> and <codeph>id</codeph> on the element.</p>
+		 
+		 </apiDesc></apiValueDetail></apiValue></apiClassifier><apiClassifier id="flashx.textLayout.conversion:ConversionType"><apiName>ConversionType</apiName><shortdesc>
+	 Values for the format of exported text.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiClassifierDetail><apiClassifierDef><apiAccess value="public"/><apiStatic/><apiFinal/><apiBaseClassifier>Object</apiBaseClassifier></apiClassifierDef><apiDesc>
+	 Values for the format of exported text.
+	 The values <codeph>STRING_TYPE</codeph> and <codeph>XML_TYPE</codeph> 
+	 can be used for the <codeph>conversionType</codeph> parameter for 
+	 the export() method in the ITextExporter interface and the
+	 TextConverter class.
+	 
+	 </apiDesc></apiClassifierDetail><related-links><link href="flashx.textLayout.conversion.xml#ITextExporter/export()"><linktext>flashx.textLayout.conversion.ITextExporter.export()</linktext></link><link href="flashx.textLayout.conversion.xml#TextConverter/export()"><linktext>flashx.textLayout.conversion.TextConverter.export()</linktext></link></related-links><apiValue id="flashx.textLayout.conversion:ConversionType:STRING_TYPE"><apiName>STRING_TYPE</apiName><shortdesc> 
+		 Export as type String.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiValueDetail><apiValueDef><apiAccess value="public"/><apiStatic/><apiData>stringType</apiData><apiType value="String"/></apiValueDef><apiDesc> 
+		 Export as type String. 
+		 </apiDesc></apiValueDetail></apiValue><apiValue id="flashx.textLayout.conversion:ConversionType:XML_TYPE"><apiName>XML_TYPE</apiName><shortdesc> 
+		 Export as type XML.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiValueDetail><apiValueDef><apiAccess value="public"/><apiStatic/><apiData>xmlType</apiData><apiType value="String"/></apiValueDef><apiDesc> 
+		 Export as type XML.
+		 </apiDesc></apiValueDetail></apiValue></apiClassifier><apiClassifier id="flashx.textLayout.conversion:ITextExporter"><apiName>ITextExporter</apiName><shortdesc> 
+	 Interface for exporting text content from a TextFlow instance to a given format, 
+	 which may for example be String or XML format, or a user-defined format.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiClassifierDetail><apiClassifierDef><apiInterface/><apiAccess value="public"/><apiStatic/><apiBaseClassifier/></apiClassifierDef><apiDesc> 
+	 Interface for exporting text content from a TextFlow instance to a given format, 
+	 which may for example be String or XML format, or a user-defined format. Exporters support the getting
+	 and setting of properties to control the export of data. These properties are implemented
+	 as public properties, but the direct access of these properties should be avoided, since
+	 a user might replace the converter class in the TextConverter registry, causing a downcast
+	 to fail.
+	 </apiDesc></apiClassifierDetail><apiOperation id="flashx.textLayout.conversion:ITextExporter:flashx.textLayout.conversion:ITextExporter:export"><apiName>export</apiName><shortdesc> 
+		 Export text content from a TextFlow instance in String, or XML, or a user defined format.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiOperationDetail><apiOperationDef><apiAccess value="public"/><apiReturn><apiDesc>Object	The exported content
+		 </apiDesc><apiType value="Object"/></apiReturn><apiParam><apiItemName>source</apiItemName><apiOperationClassifier>flashx.textLayout.elements:TextFlow</apiOperationClassifier><apiDesc>The TextFlow to export
+		 </apiDesc></apiParam><apiParam><apiItemName>conversionType</apiItemName><apiType value="String"/><apiDesc>	Return a String (STRING_TYPE) or XML (XML_TYPE), or any user defined format.
+		 </apiDesc></apiParam></apiOperationDef><apiDesc> 
+		 Export text content from a TextFlow instance in String, or XML, or a user defined format.
+		 <p>Set the <codeph>conversionType</codeph> parameter to either of the following values,
+		 or a user defined format in user-defined exporters.
+		 <ul>
+		   <li><codeph>flashx.textLayout.conversion.ConversionType.STRING_TYPE</codeph>;</li>
+		   <li><codeph>flashx.textLayout.conversion.ConversionType.XML_TYPE</codeph>.</li>
+		 </ul>
+		 </p>
+		 </apiDesc><example conref="examples\ITextExporterExample.as"/></apiOperationDetail><related-links><link href="flashx.textLayout.conversion.xml#ConversionType"><linktext>flashx.textLayout.conversion.ConversionType</linktext></link></related-links></apiOperation><apiValue id="flashx.textLayout.conversion:ITextExporter:flashx.textLayout.conversion:ITextExporter:errors:get"><apiName>errors</apiName><shortdesc> 
+		 This property contains a vector of error messages as strings after a call
+		 to an exporter method is the throwOnError property is set to
+		 false, which is the default.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10.2"/><apiPlatform description="" name="AIR" version="2.0"/></apiVersion></asMetadata></prolog><apiValueDetail><apiValueDef><apiProperty/><apiAccess value="public"/><apiDynamic/><apiValueAccess value="read"/><apiType value="Vector$String"/></apiValueDef><apiDesc> 
+		 This property contains a vector of error messages as strings after a call
+		 to an exporter method is the <codeph>throwOnError</codeph> property is set to
+		 <codeph>false</codeph>, which is the default. If there were no errors, the
+		 property returns <codeph>null</codeph>. The property is reset on each method
+		 call.
+		 </apiDesc></apiValueDetail></apiValue><apiValue id="flashx.textLayout.conversion:ITextExporter:flashx.textLayout.conversion:ITextExporter:throwOnError:get"><apiName>throwOnError</apiName><shortdesc> 
+		 The throwOnError property controls how the exporter handles errors.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10.2"/><apiPlatform description="" name="AIR" version="2.0"/></apiVersion></asMetadata></prolog><apiValueDetail><apiValueDef><apiProperty/><apiAccess value="public"/><apiDynamic/><apiValueAccess value="readwrite"/><apiType value="Boolean"/></apiValueDef><apiDesc> 
+		 The throwOnError property controls how the exporter handles errors.
+		 If set to <codeph>true</codeph>, methods throw an Error instance on errors. 
+		 If set to <codeph>false</codeph>, which is the default, errors are collected
+		 into a vector of strings and stored in the <codeph>errors</codeph> property, 
+		 and the exporter does not throw.	
+		 </apiDesc></apiValueDetail></apiValue><apiValue id="flashx.textLayout.conversion:ITextExporter:flashx.textLayout.conversion:ITextExporter:useClipboardAnnotations:get"><apiName>useClipboardAnnotations</apiName><shortdesc> 
+		 The useClipboardAnnotations property controls whether or not the 
+		 importer should handle the extra information necessary for the clipboard.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiValueDetail><apiValueDef><apiProperty/><apiAccess value="public"/><apiDynamic/><apiValueAccess value="readwrite"/><apiType value="Boolean"/></apiValueDef><apiDesc> 
+		 The <codeph>useClipboardAnnotations</codeph> property controls whether or not the 
+		 importer should handle the extra information necessary for the clipboard. 
+		 When data is in a TextFlow, paragraphs are always complete, and include a 
+		 terminator character. When a range of text is pasted to the clipboard, it
+		 will form paragraphs, but the range may not include in the final terminator.
+		 In this case, the paragraph needs to be marked as a partial paragraph if it
+		 is intended for the clipboard, so that if it is later pasted it will merge
+		 into the new text correctly. If the content is intended for the clipboard, 
+		 useClipboardAnnotations will be true.
+		 </apiDesc></apiValueDetail></apiValue></apiClassifier><apiClassifier id="flashx.textLayout.conversion:FormatDescriptor"><apiName>FormatDescriptor</apiName><shortdesc> Contains information about a format.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10.0"/><apiPlatform description="" name="AIR" version="2.0"/></apiVersion></asMetadata></prolog><apiClassifierDetail><apiClassifierDef><apiAccess value="public"/><apiStatic/><apiBaseClassifier>Object</apiBaseClassifier></apiClassifierDef><apiDesc> Contains information about a format.
+     
+     </apiDesc></apiClassifierDetail><apiConstructor id="flashx.textLayout.conversion:FormatDescriptor:FormatDescriptor"><apiName>FormatDescriptor</apiName><shortdesc> Constructor.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10.0"/><apiPlatform description="" name="AIR" version="2.0"/></apiVersion></asMetadata></prolog><apiConstructorDetail><apiConstructorDef><apiAccess value="public"/><apiParam><apiItemName>format</apiItemName><apiType value="String"/></apiParam><apiParam><apiItemName>importerClass</apiItemName><apiType value="Class"/></apiParam><apiParam><apiItemName>exporterClass</apiItemName><apiType value="Class"/></apiParam><apiParam><apiItemName>clipboardFormat</apiItemName><apiType value="String"/></apiParam></apiConstructorDef><apiDesc> Constructor.
+         
+         </apiDesc></apiConstructorDetail></apiConstructor><apiValue id="flashx.textLayout.conversion:FormatDescriptor:clipboardFormat:get"><apiName>clipboardFormat</apiName><shortdesc> Descriptor used when matching this format to the formats posted on the external clipboard.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10.0"/><apiPlatform description="" name="AIR" version="2.0"/></apiVersion></asMetadata></prolog><apiValueDetail><apiValueDef><apiProperty/><apiAccess value="public"/><apiDynamic/><apiValueAccess value="read"/><apiType value="String"/></apiValueDef><apiDesc> Descriptor used when matching this format to the formats posted on the external clipboard. If the format supports importing, 
+         (it's importerClass is not null), it will be called when pasting from the clipboard, if the clipboard contents include data 
+         in this format. If the format supports exporting, it will be called when copying to the clipboard, and the output it creates 
+         will be posted to the clipboard with this clipboardFormat.
+         
+         </apiDesc></apiValueDetail><related-links><link href="" invalidHref="flash.desktop.Clipboard.xml"><linktext>flash.desktop.Clipboard</linktext></link><link href="" invalidHref="flash.desktop.ClipboardFormats.xml"><linktext>flash.desktop.ClipboardFormats</linktext></link></related-links></apiValue><apiValue id="flashx.textLayout.conversion:FormatDescriptor:exporterClass:get"><apiName>exporterClass</apiName><shortdesc> Returns the class used for converting to the format.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10.0"/><apiPlatform description="" name="AIR" version="2.0"/></apiVersion></asMetadata></prolog><apiValueDetail><apiValueDef><apiProperty/><apiAccess value="public"/><apiDynamic/><apiValueAccess value="read"/><apiType value="Class"/></apiValueDef><apiDesc> Returns the class used for converting to the format. 
+         
+         </apiDesc></apiValueDetail></apiValue><apiValue id="flashx.textLayout.conversion:FormatDescriptor:format:get"><apiName>format</apiName><shortdesc> Returns the data format used by the converter.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10.0"/><apiPlatform description="" name="AIR" version="2.0"/></apiVersion></asMetadata></prolog><apiValueDetail><apiValueDef><apiProperty/><apiAccess value="public"/><apiDynamic/><apiValueAccess value="read"/><apiType value="String"/></apiValueDef><apiDesc> Returns the data format used by the converter.
+         
+         </apiDesc></apiValueDetail></apiValue><apiValue id="flashx.textLayout.conversion:FormatDescriptor:importerClass:get"><apiName>importerClass</apiName><shortdesc> Returns the class used for converting data from the format.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10.0"/><apiPlatform description="" name="AIR" version="2.0"/></apiVersion></asMetadata></prolog><apiValueDetail><apiValueDef><apiProperty/><apiAccess value="public"/><apiDynamic/><apiValueAccess value="read"/><apiType value="Class"/></apiValueDef><apiDesc> Returns the class used for converting data from the format. 
+         
+         </apiDesc></apiValueDetail></apiValue></apiClassifier><apiClassifier id="flashx.textLayout.conversion:ConverterBase"><apiName>ConverterBase</apiName><shortdesc>
+	 This is a base class for importers as well as exporters.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10.2"/><apiPlatform description="" name="AIR" version="2.0"/></apiVersion></asMetadata></prolog><apiClassifierDetail><apiClassifierDef><apiAccess value="public"/><apiStatic/><apiBaseClassifier>Object</apiBaseClassifier></apiClassifierDef><apiDesc>
+	 This is a base class for importers as well as exporters. It implements the error handling
+	 plus property getters and setters that generate an error when invoked.
+	 </apiDesc></apiClassifierDetail><apiValue id="flashx.textLayout.conversion:ConverterBase:MERGE_TO_NEXT_ON_PASTE"><apiName>MERGE_TO_NEXT_ON_PASTE</apiName><shortdesc> A converter that converts clipboard data into a TextFlow should use the MERGE_TO_NEXT_ON_PASTE property
+		 to control how the elements are treated when they are merged into an existing TextFlow on paste.</shortdesc><prolog><asMetadata><apiVersion><apiLanguage version="3.0"/><apiPlatform description="" name="Flash" version="10"/><apiPlatform description="" name="AIR" version="1.5"/></apiVersion></asMetadata></prolog><apiValueDetail><apiValueDef><apiAccess value="public"/><apiStatic/><apiData>mergeToNextOnPaste</apiData><apiType value="String"/></apiValueDef><apiDesc> A converter that converts clipboard data into a TextFlow should use the MERGE_TO_NEXT_ON_PASTE property
+		 to control how the elements are treated when they are merged into an existing TextFlow on paste. This is useful
+		 if you want special handling for the case where only part of the element is copied. For instance, wheh a list
+		 is copied, if only part of the list is copied, and you paste it into another list, it merges into the list as
+		 additional items. If the entire list is copied, it appears as a nested list. When TLF creates a TextFlow for use
+		 on the clipboard, it decorates any partial elements with user properties that control whether the end of the element 
+		 should be merged with the one after it. This user property is never pasted into the final TextFlow, but it may go 
+		 on the elements in the TextScrap.textFlow. When copying text, the converter has the option to look for these properties 
+		 to propagate them into the format that is posted on the clipboard. For instance, the plain text exporter checks the 
+		 "mergeToNextOnPaste" property on paragraphs and supresses the paragraph terminator if it is found set to true. 
+		 Likewise on import if the incoming String has no terminator, and useClipboardAnnotations is true, then it calls 
+		 <codeph>setStyle(MERGE_TO_NEXT_ON_PASTE, "true")</codeph> on the corresponding paragraph so that when it is pasted 
+		 it will blend into the paragraph where its pasted. This property should only be set on elements in a TextScrap, and
+		 only on the last element in the scrap.
+		 
+		 </apiDesc></apiValueDetail></apiValue><apiValue id="flashx.textLayout.conversion:ConverterBase:errors:get"><apiName>errors</apiName><shortdesc> Errors encountered while parsing.</shortdesc><prolog/><apiValueDetail><apiValueDef><apiProperty/><apiAccess value="public"/><apiDynamic/><apiValueAccess value="read"/><apiType value="Vector$String"/></apiValueDef><apiDesc> Errors encountered while parsing. 
+		 Value is a vector of Strings.
+		 </apiDesc></apiValueDetail></apiValue><apiValue id="flashx.textLayout.conversion:ConverterBase:throwOnError:get"><apiName>throwOnError</apiName><shortdesc conref="ITextImporter#throwOnError()"> </shortdesc><prolog/><apiValueDetail><apiValueDef><apiProperty/><apiAccess value="public"/><apiDynamic/><apiValueAccess value="readwrite"/><apiType value="Boolean"/></apiValueDef><apiDesc conref="ITextImporter#throwOnError()"> </apiDesc></apiValueDetail></apiValue><apiValue id="flashx.textLayout.conversion:ConverterBase:useClipboardAnnotations:get"><apiName>useClipboardAnnotations</apiName><shortdesc conref="ITextImporter#useClipboardAnnotations()"> </shortdesc><prolog/><apiValueDetail><apiValueDef><apiProperty/><apiAccess value="public"/><apiDynamic/><apiValueAccess value="readwrite"/><apiType value="Boolean"/></apiValueDef><apiDesc conref="ITextImporter#useClipboardAnnotations()"> </apiDesc></apiValueDetail></apiValue></apiClassifier></apiPackage>

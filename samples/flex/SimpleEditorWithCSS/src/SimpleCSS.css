@@ -1,0 +1,52 @@
+/**
+	ADOBE SYSTEMS INCORPORATED
+	Copyright 2008 Adobe Systems Incorporated
+	All Rights Reserved.
+	
+	NOTICE:  Adobe permits you to use, modify, and distribute this file 
+	in accordance with the terms of the Adobe license agreement 
+	accompanying it.  If you have received this file from a source 
+	other than Adobe, then your use, modification, or distribution 
+	of it requires the prior written permission of Adobe.
+*/
+
+@namespace tlf "flashx.textLayout.elements.*";
+
+tlf|span 
+{
+	fontSize:		"18";
+}
+
+/* qualify the name with a namespace */
+tlf|TextFlow
+{
+	columnCount:            "2";
+	textIndent:             '15';
+	paragraphSpaceAfter:	"15";
+	paddingTop:             "4";
+	paddingLeft:            "4";
+}
+
+tlf|foo
+{
+	fontSize:		"18";
+	color:			"0xff00";
+}
+
+.italic
+{
+	fontStyle:		"italic";
+	color:			"0xff";
+	fontFamily:		"Helvetica";
+}
+
+.center
+{
+	textAlign:		"center";
+}
+
+#bold
+{
+	fontWeight:		"bold";
+}
+
